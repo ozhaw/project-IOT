@@ -2,16 +2,14 @@ package org.nure.julia.misc;
 
 import static java.lang.String.format;
 
-public enum DeviceJobStatus {
-    RUNNING("Job for device %s is running"),
-    PAUSED("Job for device %s is paused"),
-    DEAD("Job for device %s is dead"),
-    NEW("Job for device %s is ready for actions"),
+public enum DeviceStatus {
+    IN_USE("Device %s is used by job"),
+    NEW("Device %s is ready for actions"),
     UNKNOWN("%s");
 
     private String transitionMessage;
 
-    DeviceJobStatus(String transitionMessage) {
+    DeviceStatus(String transitionMessage) {
         this.transitionMessage = transitionMessage;
     }
 

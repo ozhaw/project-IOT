@@ -1,17 +1,17 @@
 package org.nure.julia.generator;
 
-import org.nure.julia.misc.DeviceJobStatus;
+import org.nure.julia.misc.DeviceStatus;
 
 import java.util.Set;
 
 public interface DeviceService {
-    DeviceJobStatus addDevice(String deviceId);
+    DeviceStatus addDevice(String deviceId);
 
     void addDevices(Set<String> deviceIds);
 
     Set<String> getDeviceIds();
 
-    Set<String> getDeviceIdsWithStatus(DeviceJobStatus deviceJobStatus);
+    Set<String> getDeviceIdsWithStatus(DeviceStatus deviceStatus);
 
     boolean exists(String deviceId);
 

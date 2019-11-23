@@ -1,7 +1,7 @@
 package org.nure.julia.generator.spi;
 
 import org.nure.julia.generator.DeviceService;
-import org.nure.julia.misc.DeviceJobStatus;
+import org.nure.julia.misc.DeviceStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -15,17 +15,17 @@ import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 @Service
 public class DeviceServiceImpl implements DeviceService {
-    private Map<String, DeviceJobStatus> deviceIds = new HashMap<>();
+    private Map<String, DeviceStatus> deviceIds = new HashMap<>();
 
     @Override
-    public DeviceJobStatus addDevice(String deviceId) {
-        return defaultIfNull(deviceIds.put(deviceId, DeviceJobStatus.NEW), DeviceJobStatus.NEW);
+    public DeviceStatus addDevice(String deviceId) {
+        return defaultIfNull(deviceIds.put(deviceId, DeviceStatus.NEW), DeviceStatus.NEW);
     }
 
     @Override
     public void addDevices(Set<String> deviceIds) {
         this.deviceIds.putAll(deviceIds.stream()
-                .collect(toMap(value -> value, value -> DeviceJobStatus.NEW)));
+                .collect(toMap(value -> value, value -> DeviceStatus.NEW)));
     }
 
     @Override
@@ -34,10 +34,10 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Set<String> getDeviceIdsWithStatus(DeviceJobStatus deviceJobStatus) {
+    public Set<String> getDeviceIdsWithStatus(DeviceStatus deviceStatus) {
         return this.deviceIds.entrySet()
                 .stream()
-                .filter(entry -> entry.getValue() == deviceJobStatus)
+                .filter(entry -> entry.getValue() == deviceStatus)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
     }

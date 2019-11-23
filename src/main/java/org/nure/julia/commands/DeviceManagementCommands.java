@@ -1,7 +1,7 @@
 package org.nure.julia.commands;
 
 import org.nure.julia.generator.DeviceService;
-import org.nure.julia.misc.DeviceJobStatus;
+import org.nure.julia.misc.DeviceStatus;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -49,8 +49,8 @@ public class DeviceManagementCommands {
     }
 
     @ShellMethod(key = {"show-devices"}, value = "Show devices")
-    public Collection<String> showDevices(@ShellOption(value = {"-JS", "--jobStatus"}, defaultValue = "UNKNOWN") DeviceJobStatus jobStatus) {
-        return jobStatus == DeviceJobStatus.UNKNOWN
+    public Collection<String> showDevices(@ShellOption(value = {"-JS", "--jobStatus"}, defaultValue = "UNKNOWN") DeviceStatus jobStatus) {
+        return jobStatus == DeviceStatus.UNKNOWN
                 ? deviceService.getDeviceIds()
                 : deviceService.getDeviceIdsWithStatus(jobStatus);
     }
