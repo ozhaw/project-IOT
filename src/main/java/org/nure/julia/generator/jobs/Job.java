@@ -10,14 +10,15 @@ import java.util.UUID;
 
 import static java.lang.String.format;
 
-public abstract class Job<T extends Job, R> implements Comparable<T> {
-    private String id = UUID.randomUUID().toString();
+public abstract class Job<R> {
+    private String id;
     private JobStatus jobStatus = JobStatus.NEW;
     private JobPriority priority = JobPriority.DEFAULT;
     private String deviceId;
 
     public Job(String deviceId) {
         this.deviceId = deviceId;
+        this.id = UUID.randomUUID().toString();
     }
 
     public JobStatus getJobStatus() {
@@ -49,9 +50,18 @@ public abstract class Job<T extends Job, R> implements Comparable<T> {
         this.id = id;
     }
 
+    public String getDeviceId() {
+        return deviceId;
+    }
+
     @Override
-    public int compareTo(T job) {
-        return this.priority.compareTo(job.getPriority());
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Job && id.equals(((Job) obj).id);
     }
 
     public abstract R execute();

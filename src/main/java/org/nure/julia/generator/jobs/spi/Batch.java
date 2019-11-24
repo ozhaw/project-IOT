@@ -5,10 +5,7 @@ import org.nure.julia.generator.jobs.Job;
 import org.nure.julia.misc.JobStatus;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -17,7 +14,7 @@ public class Batch {
 
     private final int poolSize;
 
-    private Set<Job> jobs = new TreeSet<>();
+    private Set<Job> jobs = new HashSet<>();
     private String id = UUID.randomUUID().toString();
 
     public Batch() {
@@ -40,7 +37,11 @@ public class Batch {
     }
 
     public void runJobs() {
-        List<Object> jobResult = jobs.stream()
+        jobs.forEach(Job::execute);
+    }
+
+    public List<Object> runJobsForResult() {
+        return jobs.stream()
                 .map(Job::execute)
                 .collect(toList());
     }

@@ -1,10 +1,25 @@
 spring:
   main:
     banner-mode: 'off'
+  activemq:
+    broker-url: tcp://localhost:61616
+    user: admin
+    password: admin
+    pool:
+      enabled: true
+      max-connections: 5000
+  jms:
+    cache:
+      session-cache-size: 5
 
 application:
   events:
     auto-device-register: true
+    batch-result-auto-send: true
+  jms:
+    topics:
+      device-info: device-info
+      health-info: health-info
 
 
 logging:
