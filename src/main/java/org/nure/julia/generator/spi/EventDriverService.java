@@ -1,6 +1,7 @@
-package org.nure.julia.generator;
+package org.nure.julia.generator.spi;
 
 import org.nure.julia.events.events.DeviceAddedEvent;
+import org.nure.julia.generator.DeviceService;
 import org.nure.julia.generator.jobs.JobFactory;
 import org.nure.julia.misc.DeviceStatus;
 import org.springframework.beans.factory.annotation.Autowired;

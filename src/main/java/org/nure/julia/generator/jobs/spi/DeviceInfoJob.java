@@ -1,7 +1,7 @@
-package org.nure.julia.generator.jobs.entity.spi;
+package org.nure.julia.generator.jobs.spi;
 
 import org.nure.julia.dto.DeviceInfoDto;
-import org.nure.julia.generator.jobs.entity.Job;
+import org.nure.julia.generator.jobs.Job;
 
 public class DeviceInfoJob extends Job<DeviceInfoJob, DeviceInfoDto> {
     public DeviceInfoJob(String deviceId) {

@@ -1,4 +1,4 @@
-package org.nure.julia.generator.jobs.entity;
+package org.nure.julia.generator.jobs;
 
 import org.nure.julia.exceptions.WrongJobStateTransitionException;
 import org.nure.julia.misc.JobPriority;

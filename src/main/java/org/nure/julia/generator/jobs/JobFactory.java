@@ -1,7 +1,6 @@
 package org.nure.julia.generator.jobs;
 
-import org.nure.julia.generator.jobs.entity.Batch;
-import org.nure.julia.generator.jobs.entity.Job;
+import org.nure.julia.generator.jobs.spi.Batch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,7 +38,7 @@ public class JobFactory {
     }
 
     public void runAll() {
-        pool.forEach(Batch::runJobs);
+        pool.parallelStream().forEach(Batch::runJobs);
     }
 
     private Batch getAvailableBatch() {

@@ -1,6 +1,7 @@
-package org.nure.julia.generator.jobs.entity;
+package org.nure.julia.generator.jobs.spi;
 
 import org.nure.julia.exceptions.BatchIsFullException;
+import org.nure.julia.generator.jobs.Job;
 import org.nure.julia.misc.JobStatus;
 
 import javax.validation.constraints.NotNull;
@@ -8,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 

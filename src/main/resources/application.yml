@@ -5,3 +5,8 @@ spring:
 application:
   events:
     auto-device-register: true
+
+
+logging:
+  pattern:
+    console:

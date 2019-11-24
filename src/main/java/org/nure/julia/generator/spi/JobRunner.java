@@ -1,4 +1,4 @@
-package org.nure.julia.generator;
+package org.nure.julia.generator.spi;
 
 import org.nure.julia.generator.jobs.JobFactory;
 import org.springframework.beans.factory.annotation.Autowired;

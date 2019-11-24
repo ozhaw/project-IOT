@@ -1,8 +1,8 @@
 package org.nure.julia;
 
-import org.nure.julia.generator.jobs.entity.Job;
-import org.nure.julia.generator.jobs.entity.spi.DeviceInfoJob;
-import org.nure.julia.generator.jobs.entity.spi.HealthInfoJob;
+import org.nure.julia.generator.jobs.Job;
+import org.nure.julia.generator.jobs.spi.DeviceInfoJob;
+import org.nure.julia.generator.jobs.spi.HealthInfoJob;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
