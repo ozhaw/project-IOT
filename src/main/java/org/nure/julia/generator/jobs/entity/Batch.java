@@ -4,9 +4,13 @@ import org.nure.julia.exceptions.BatchIsFullException;
 import org.nure.julia.misc.JobStatus;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class Batch {
     private static final Integer DEFAULT_POOL_SIZE = 16;
@@ -33,6 +37,12 @@ public class Batch {
         }
 
         return this;
+    }
+
+    public void runJobs() {
+        List<Object> jobResult = jobs.stream()
+                .map(Job::execute)
+                .collect(toList());
     }
 
     public boolean isFull() {

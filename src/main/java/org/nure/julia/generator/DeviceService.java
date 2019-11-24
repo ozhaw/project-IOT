@@ -7,6 +7,10 @@ import java.util.Set;
 public interface DeviceService {
     DeviceStatus addDevice(String deviceId);
 
+    DeviceStatus getDeviceStatus(String deviceId);
+
+    DeviceStatus setDeviceStatus(String deviceId, DeviceStatus deviceStatus);
+
     void addDevices(Set<String> deviceIds);
 
     Set<String> getDeviceIds();

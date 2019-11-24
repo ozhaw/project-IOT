@@ -6,10 +6,12 @@ import org.nure.julia.generator.jobs.entity.spi.HealthInfoJob;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.function.Function;
 
 @SpringBootApplication
+@EnableScheduling
 public class ShellApplication {
 
     public static void main(String[] args) {

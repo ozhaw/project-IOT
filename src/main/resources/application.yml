@@ -1,3 +1,7 @@
 spring:
   main:
     banner-mode: 'off'
+
+application:
+  events:
+    auto-device-register: true

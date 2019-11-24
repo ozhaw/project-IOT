@@ -5,6 +5,7 @@ import org.nure.julia.generator.jobs.entity.Job;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +29,17 @@ public class JobFactory {
                 .forEach(batch::addJob);
 
         return batch.getId();
+    }
+
+    public void run(@NotNull final String id) {
+        pool.stream()
+                .filter(batch -> id.equals(batch.getId()))
+                .findFirst()
+                .ifPresent(Batch::runJobs);
+    }
+
+    public void runAll() {
+        pool.forEach(Batch::runJobs);
     }
 
     private Batch getAvailableBatch() {
