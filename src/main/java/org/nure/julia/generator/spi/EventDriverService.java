@@ -3,38 +3,62 @@ package org.nure.julia.generator.spi;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.nure.julia.events.events.DeviceAddedEvent;
+import org.nure.julia.events.events.JobAddedEvent;
 import org.nure.julia.events.events.JobFinishedEvent;
+import org.nure.julia.events.events.JobStatusChangedEvent;
 import org.nure.julia.generator.DeviceService;
 import org.nure.julia.generator.jobs.JobFactory;
-import org.nure.julia.misc.DeviceStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import static java.lang.String.format;
 
 @Service
 public class EventDriverService {
-    private final DeviceService deviceService;
     private final JobFactory jobFactory;
-    private final List<String> results = new ArrayList<>();
+    private final JmsTemplate jmsTemplate;
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    @Value("${application.jms.queues.appQueue}")
+    private String eventQueue;
 
     @Autowired
-    public EventDriverService(DeviceService deviceService, JobFactory jobFactory) {
-        this.deviceService = deviceService;
+    public EventDriverService(JobFactory jobFactory, JmsTemplate jmsTemplate) {
         this.jobFactory = jobFactory;
+        this.jmsTemplate = jmsTemplate;
     }
 
-    @EventListener(condition = "@deviceService.autoRegisterEnabled " +
-            "and @deviceService.getDeviceStatus(#event.deviceId).name() == 'NEW'")
+    @EventListener(condition = "@deviceService.autoRegisterEnabled")
     public void deviceAddedEvent(DeviceAddedEvent event) {
-        deviceService.setDeviceStatus(event.getDeviceId(), DeviceStatus.IN_USE);
         jobFactory.registerDevice(event.getDeviceId());
     }
 
     @EventListener(condition = "@jobFactory.autoBatchResultSendEnabled")
-    public void jobFinishedEvent(JobFinishedEvent event) throws JsonProcessingException {
-        results.add(new ObjectMapper().writeValueAsString(event.getSource()));
+    public void jobFinishedEvent(JobFinishedEvent event) {
+        try {
+            jmsTemplate.convertAndSend(eventQueue, mapper.writeValueAsString(event.getSource()));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            System.out.println("Unable to send job results to the Queue");
+        }
+    }
+
+    @EventListener
+    @Async
+    public void jobStatusChangedEvent(JobStatusChangedEvent jobStatusChangedEvent) {
+        System.out.println(format("Job %s now has status %s",
+                jobStatusChangedEvent.getJobId(), jobStatusChangedEvent.getJobStatus().name()));
+    }
+
+    @EventListener
+    @Async
+    public void jobStatusChangedEvent(JobAddedEvent jobAddedEvent) {
+        System.out.println(format("Job %s was added", jobAddedEvent.getJobId()));
     }
 }

@@ -1,10 +1,8 @@
 package org.nure.julia.commands;
 
 import org.nure.julia.generator.DeviceService;
-import org.nure.julia.misc.DeviceStatus;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import org.springframework.shell.standard.ShellOption;
 
 import java.util.Collection;
 import java.util.Set;
@@ -22,8 +20,8 @@ public class DeviceManagementCommands {
 
     @ShellMethod(key = {"add-device"}, value = "Add a new device")
     public String addDevice(String deviceId) {
-        return !deviceService.exists(deviceId)
-                ? deviceService.addDevice(deviceId).getTransitionMessage(deviceId)
+        return !deviceService.exists(deviceId) && deviceService.addDevice(deviceId)
+                ? format("Device {%s} was added", deviceId)
                 : format("Device {%s} is exists", deviceId);
     }
 
@@ -49,9 +47,7 @@ public class DeviceManagementCommands {
     }
 
     @ShellMethod(key = {"show-devices"}, value = "Show devices")
-    public Collection<String> showDevices(@ShellOption(value = {"-JS", "--jobStatus"}, defaultValue = "UNKNOWN") DeviceStatus jobStatus) {
-        return jobStatus == DeviceStatus.UNKNOWN
-                ? deviceService.getDeviceIds()
-                : deviceService.getDeviceIdsWithStatus(jobStatus);
+    public Collection<String> showDevices() {
+        return deviceService.getDeviceIds();
     }
 }

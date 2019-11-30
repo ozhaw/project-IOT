@@ -1,7 +1,9 @@
 package org.nure.julia.generator.jobs;
 
 import org.nure.julia.events.events.JobFinishedEvent;
+import org.nure.julia.exceptions.JobNotFoundException;
 import org.nure.julia.generator.jobs.spi.Batch;
+import org.nure.julia.misc.JobStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -39,8 +41,7 @@ public class JobFactory {
     }
 
     public void run(@NotNull final String id) {
-        pool.stream()
-                .filter(batch -> id.equals(batch.getId()))
+        pool.stream().filter(batch -> id.equals(batch.getId()))
                 .findFirst()
                 .map(Batch::runJobsForResult)
                 .filter(result -> autoBatchResultSendEnabled)
@@ -54,12 +55,28 @@ public class JobFactory {
                 .forEach(result -> this.publisher.publishEvent(new JobFinishedEvent(result)));
     }
 
+    public void stopJob(@NotNull String batchId, @NotNull String jobId) {
+        pool.stream().filter(batch -> batch.getId().equals(batchId))
+                .forEach(batch -> batch.stopJob(jobId));
+    }
+
+    public void resumeJob(@NotNull String batchId, @NotNull String jobId) {
+        pool.stream().filter(batch -> batch.getId().equals(batchId))
+                .forEach(batch -> batch.resumeJob(jobId));
+    }
+
+    public JobStatus getJobStatus(@NotNull String batchId, @NotNull String jobId) {
+        return pool.stream().filter(batch -> batch.getId().equals(batchId))
+                .map(batch -> batch.getJobStatus(jobId))
+                .findFirst().orElseThrow(() -> new JobNotFoundException("Job not found"));
+    }
+
     private Batch getAvailableBatch() {
         return pool.stream()
                 .filter(batch -> !batch.isFull())
                 .findFirst()
                 .orElseGet(() -> {
-                    Batch batch = new Batch();
+                    Batch batch = new Batch(publisher);
                     pool.add(batch);
                     return batch;
                 });

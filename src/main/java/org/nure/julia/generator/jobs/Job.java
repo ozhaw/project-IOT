@@ -1,8 +1,10 @@
 package org.nure.julia.generator.jobs;
 
+import org.nure.julia.events.events.JobStatusChangedEvent;
 import org.nure.julia.exceptions.WrongJobStateTransitionException;
 import org.nure.julia.misc.JobPriority;
 import org.nure.julia.misc.JobStatus;
+import org.springframework.context.ApplicationEventPublisher;
 
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
@@ -15,6 +17,7 @@ public abstract class Job<R> {
     private JobStatus jobStatus = JobStatus.NEW;
     private JobPriority priority = JobPriority.DEFAULT;
     private String deviceId;
+    private ApplicationEventPublisher eventPublisher;
 
     public Job(String deviceId) {
         this.deviceId = deviceId;
@@ -32,6 +35,16 @@ public abstract class Job<R> {
         }
 
         this.jobStatus = jobStatus;
+
+        this.eventPublisher.publishEvent(new JobStatusChangedEvent(this.id, this.id, this.jobStatus));
+    }
+
+    public ApplicationEventPublisher getEventPublisher() {
+        return eventPublisher;
+    }
+
+    public void setEventPublisher(ApplicationEventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
     }
 
     public JobPriority getPriority() {

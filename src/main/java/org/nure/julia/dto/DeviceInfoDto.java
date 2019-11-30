@@ -2,7 +2,7 @@ package org.nure.julia.dto;
 
 import java.util.Date;
 
-public class DeviceInfoDto {
+public class DeviceInfoDto implements SourceDto {
     private Date auditDate;
     private String deviceStatus;
     private String deviceId;
@@ -29,5 +29,10 @@ public class DeviceInfoDto {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    @Override
+    public String getSource() {
+        return "device";
     }
 }

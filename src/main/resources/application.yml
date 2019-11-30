@@ -1,26 +1,34 @@
 spring:
-  main:
-    banner-mode: 'off'
-  activemq:
-    broker-url: tcp://localhost:61616
-    user: admin
-    password: admin
-    pool:
+  artemis:
+    mode: embedded
+    embedded:
       enabled: true
-      max-connections: 5000
+      queues: eventQueue
   jms:
     cache:
       session-cache-size: 5
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - hawtio
+          - jolokia
+
+server:
+  port: 2000
+
+hawtio:
+  authenticationEnabled: false
 
 application:
   events:
     auto-device-register: true
     batch-result-auto-send: true
   jms:
-    topics:
-      device-info: device-info
-      health-info: health-info
-
+    queues:
+      appQueue: eventQueue
 
 logging:
   pattern:

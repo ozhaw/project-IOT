@@ -15,7 +15,7 @@ public class JobRunner {
         this.jobFactory = jobFactory;
     }
 
-    @Scheduled(fixedRate = 120000)
+    @Scheduled(fixedRate = 30000)
     public void run() {
         jobFactory.runAll();
     }
