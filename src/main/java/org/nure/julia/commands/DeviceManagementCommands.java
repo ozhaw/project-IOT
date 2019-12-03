@@ -19,17 +19,17 @@ public class DeviceManagementCommands {
     }
 
     @ShellMethod(key = {"add-device"}, value = "Add a new device")
-    public String addDevice(String deviceId) {
-        return !deviceService.exists(deviceId) && deviceService.addDevice(deviceId)
-                ? format("Device {%s} was added", deviceId)
-                : format("Device {%s} is exists", deviceId);
+    public void addDevice(String deviceId) {
+        if (!deviceService.exists(deviceId)) {
+            deviceService.addDevice(deviceId);
+        } else {
+            System.out.println(format("Device {%s} exists", deviceId));
+        }
     }
 
     @ShellMethod(key = {"add-devices"}, value = "Add a new devices")
-    public String addDevices(Set<String> deviceIds) {
-        return deviceIds.stream()
-                .map(this::addDevice)
-                .collect(Collectors.joining(System.lineSeparator()));
+    public void addDevices(Set<String> deviceIds) {
+        deviceIds.forEach(this::addDevice);
     }
 
     @ShellMethod(key = {"remove-device"}, value = "Remove device")

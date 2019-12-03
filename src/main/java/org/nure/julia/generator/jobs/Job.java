@@ -1,5 +1,6 @@
 package org.nure.julia.generator.jobs;
 
+import org.nure.julia.dto.JobLogDto;
 import org.nure.julia.events.events.JobStatusChangedEvent;
 import org.nure.julia.exceptions.WrongJobStateTransitionException;
 import org.nure.julia.misc.JobPriority;
@@ -7,8 +8,7 @@ import org.nure.julia.misc.JobStatus;
 import org.springframework.context.ApplicationEventPublisher;
 
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
-import java.util.UUID;
+import java.util.*;
 
 import static java.lang.String.format;
 
@@ -18,10 +18,12 @@ public abstract class Job<R> {
     private JobPriority priority = JobPriority.DEFAULT;
     private String deviceId;
     private ApplicationEventPublisher eventPublisher;
+    private List<JobLogDto> jobLogs;
 
     public Job(String deviceId) {
         this.deviceId = deviceId;
         this.id = UUID.randomUUID().toString();
+        this.jobLogs = new ArrayList<>();
     }
 
     public JobStatus getJobStatus() {
@@ -78,4 +80,12 @@ public abstract class Job<R> {
     }
 
     public abstract R execute();
+
+    public R run() {
+        R result = this.execute();
+
+        jobLogs.add(new JobLogDto(this.id, new Date(), true));
+
+        return result;
+    }
 }

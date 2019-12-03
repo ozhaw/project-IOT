@@ -49,8 +49,7 @@ public class JobFactory {
     }
 
     public void runAll() {
-        pool.parallelStream()
-                .map(Batch::runJobsForResult)
+        pool.stream().map(Batch::runJobsForResult)
                 .filter(result -> autoBatchResultSendEnabled)
                 .forEach(result -> this.publisher.publishEvent(new JobFinishedEvent(result)));
     }

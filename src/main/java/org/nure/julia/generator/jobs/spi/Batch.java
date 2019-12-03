@@ -49,39 +49,34 @@ public class Batch {
 
     public void runJobs() {
         this.prepareJobs();
-        jobs.stream()
-                .filter(job -> job.getJobStatus() == JobStatus.READY)
-                .forEach(Job::execute);
+        jobs.parallelStream().filter(job -> job.getJobStatus() == JobStatus.READY)
+                .forEach(Job::run);
     }
 
     public List<Object> runJobsForResult() {
         this.prepareJobs();
-        return jobs.stream()
-                .filter(job -> job.getJobStatus() == JobStatus.READY)
-                .map(Job::execute)
+        return jobs.parallelStream().filter(job -> job.getJobStatus() == JobStatus.READY)
+                .map(Job::run)
                 .collect(toList());
     }
 
     private void prepareJobs() {
-        jobs.stream().filter(job -> job.getJobStatus() == JobStatus.NEW)
+        jobs.parallelStream().filter(job -> job.getJobStatus() == JobStatus.NEW)
                 .forEach(job -> job.setJobStatus(JobStatus.READY));
     }
 
     public void stopJob(@NotNull String jobId) {
-        this.jobs.stream()
-                .filter(job -> job.getId().equals(jobId))
+        this.jobs.stream().filter(job -> job.getId().equals(jobId))
                 .forEach(job -> job.setJobStatus(JobStatus.PAUSED));
     }
 
     public void resumeJob(@NotNull String jobId) {
-        this.jobs.stream()
-                .filter(job -> job.getId().equals(jobId))
+        this.jobs.stream().filter(job -> job.getId().equals(jobId))
                 .forEach(job -> job.setJobStatus(JobStatus.READY));
     }
 
     public JobStatus getJobStatus(@NotNull String jobId) {
-        return this.jobs.stream()
-                .filter(job -> job.getId().equals(jobId))
+        return this.jobs.stream().filter(job -> job.getId().equals(jobId))
                 .map(Job::getJobStatus)
                 .findFirst().orElseThrow(() -> new JobNotFoundException("Job not found"));
     }

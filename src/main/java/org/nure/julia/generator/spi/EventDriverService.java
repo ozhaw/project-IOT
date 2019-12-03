@@ -6,10 +6,7 @@ import org.nure.julia.events.events.DeviceAddedEvent;
 import org.nure.julia.events.events.JobAddedEvent;
 import org.nure.julia.events.events.JobFinishedEvent;
 import org.nure.julia.events.events.JobStatusChangedEvent;
-import org.nure.julia.generator.DeviceService;
 import org.nure.julia.generator.jobs.JobFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
@@ -36,6 +33,7 @@ public class EventDriverService {
 
     @EventListener(condition = "@deviceService.autoRegisterEnabled")
     public void deviceAddedEvent(DeviceAddedEvent event) {
+        System.out.println(format("Device %s was added", event.getDeviceId()));
         jobFactory.registerDevice(event.getDeviceId());
     }
 

@@ -8,7 +8,7 @@ public enum JobStatus {
     NEW("READY"),
     READY("RUNNING"),
     RUNNING("PAUSED"),
-    PAUSED("RUNNING", "READY");
+    PAUSED("READY");
 
     private String[] allowedTransitions;
 
