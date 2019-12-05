@@ -10,8 +10,8 @@ import java.util.Date;
 public class HealthInfoJob extends Job<HealthInfoDto> {
     private final String[] availableHealthInfoStates = new String[]{"OK", "NODATA", "DANGER", "CRITICAL"};
 
-    public HealthInfoJob(String deviceId) {
-        super(deviceId);
+    public HealthInfoJob(String deviceId, String destination) {
+        super(deviceId, destination);
     }
 
     @Override

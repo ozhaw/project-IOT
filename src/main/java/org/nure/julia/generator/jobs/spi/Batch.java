@@ -60,11 +60,6 @@ public class Batch {
                 .collect(toList());
     }
 
-    private void prepareJobs() {
-        jobs.parallelStream().filter(job -> job.getJobStatus() == JobStatus.NEW)
-                .forEach(job -> job.setJobStatus(JobStatus.READY));
-    }
-
     public void stopJob(@NotNull String jobId) {
         this.jobs.stream().filter(job -> job.getId().equals(jobId))
                 .forEach(job -> job.setJobStatus(JobStatus.PAUSED));
@@ -101,5 +96,10 @@ public class Batch {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Batch && id.equals(((Batch) obj).id);
+    }
+
+    private void prepareJobs() {
+        jobs.parallelStream().filter(job -> job.getJobStatus() == JobStatus.NEW)
+                .forEach(job -> job.setJobStatus(JobStatus.READY));
     }
 }

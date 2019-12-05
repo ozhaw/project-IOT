@@ -10,8 +10,8 @@ import java.util.Date;
 public class DeviceInfoJob extends Job<DeviceInfoDto> {
     private final String[] availableDeviceInfoStates = new String[]{"OK", "NDCHRG", "MLFUNC", "OFFLINE"};
 
-    public DeviceInfoJob(String deviceId) {
-        super(deviceId);
+    public DeviceInfoJob(String deviceId, String destination) {
+        super(deviceId, destination);
     }
 
     @Override

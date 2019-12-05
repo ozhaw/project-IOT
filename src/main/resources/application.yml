@@ -1,13 +1,3 @@
-spring:
-  artemis:
-    mode: embedded
-    embedded:
-      enabled: true
-      queues: eventQueue
-  jms:
-    cache:
-      session-cache-size: 5
-
 management:
   endpoints:
     web:
@@ -22,14 +12,6 @@ server:
 hawtio:
   authenticationEnabled: false
 
-application:
-  events:
-    auto-device-register: true
-    batch-result-auto-send: true
-  jms:
-    queues:
-      appQueue: eventQueue
-
-logging:
-  pattern:
-    console:
+spring:
+  activemq:
+    broker-url: tcp://localhost:61616

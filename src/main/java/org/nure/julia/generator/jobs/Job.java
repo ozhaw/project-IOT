@@ -1,6 +1,7 @@
 package org.nure.julia.generator.jobs;
 
 import org.nure.julia.dto.JobLogDto;
+import org.nure.julia.events.events.JobFinishedEvent;
 import org.nure.julia.events.events.JobStatusChangedEvent;
 import org.nure.julia.exceptions.WrongJobStateTransitionException;
 import org.nure.julia.misc.JobPriority;
@@ -17,13 +18,16 @@ public abstract class Job<R> {
     private JobStatus jobStatus = JobStatus.NEW;
     private JobPriority priority = JobPriority.DEFAULT;
     private String deviceId;
+    private String destination;
+
     private ApplicationEventPublisher eventPublisher;
     private List<JobLogDto> jobLogs;
 
-    public Job(String deviceId) {
+    public Job(String deviceId, String destination) {
         this.deviceId = deviceId;
         this.id = UUID.randomUUID().toString();
         this.jobLogs = new ArrayList<>();
+        this.destination = destination;
     }
 
     public JobStatus getJobStatus() {
@@ -69,6 +73,21 @@ public abstract class Job<R> {
         return deviceId;
     }
 
+    public String getDestination() {
+        return destination;
+    }
+
+    public abstract R execute();
+
+    public R run() {
+        R result = this.execute();
+
+        jobLogs.add(new JobLogDto(this.id, new Date(), true));
+        this.eventPublisher.publishEvent(new JobFinishedEvent(result, this.destination));
+
+        return result;
+    }
+
     @Override
     public int hashCode() {
         return id.hashCode();
@@ -79,13 +98,4 @@ public abstract class Job<R> {
         return obj instanceof Job && id.equals(((Job) obj).id);
     }
 
-    public abstract R execute();
-
-    public R run() {
-        R result = this.execute();
-
-        jobLogs.add(new JobLogDto(this.id, new Date(), true));
-
-        return result;
-    }
 }

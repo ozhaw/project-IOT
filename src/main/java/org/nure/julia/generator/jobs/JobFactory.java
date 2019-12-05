@@ -1,11 +1,9 @@
 package org.nure.julia.generator.jobs;
 
-import org.nure.julia.events.events.JobFinishedEvent;
 import org.nure.julia.exceptions.JobNotFoundException;
 import org.nure.julia.generator.jobs.spi.Batch;
 import org.nure.julia.misc.JobStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -21,9 +19,6 @@ public class JobFactory {
     private final ApplicationEventPublisher publisher;
 
     private final Set<Batch> pool = new HashSet<>();
-
-    @Value("${application.events.batch-result-auto-send}")
-    private boolean autoBatchResultSendEnabled;
 
     @Autowired
     public JobFactory(List<Function<String, Job>> availableJobTypes, ApplicationEventPublisher publisher) {
@@ -43,15 +38,11 @@ public class JobFactory {
     public void run(@NotNull final String id) {
         pool.stream().filter(batch -> id.equals(batch.getId()))
                 .findFirst()
-                .map(Batch::runJobsForResult)
-                .filter(result -> autoBatchResultSendEnabled)
-                .ifPresent(result -> this.publisher.publishEvent(new JobFinishedEvent(result)));
+                .ifPresent(Batch::runJobsForResult);
     }
 
     public void runAll() {
-        pool.stream().map(Batch::runJobsForResult)
-                .filter(result -> autoBatchResultSendEnabled)
-                .forEach(result -> this.publisher.publishEvent(new JobFinishedEvent(result)));
+        pool.forEach(Batch::runJobsForResult);
     }
 
     public void stopJob(@NotNull String batchId, @NotNull String jobId) {
@@ -79,10 +70,6 @@ public class JobFactory {
                     pool.add(batch);
                     return batch;
                 });
-    }
-
-    public boolean isAutoBatchResultSendEnabled() {
-        return autoBatchResultSendEnabled;
     }
 
 }

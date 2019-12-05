@@ -8,7 +8,6 @@ import org.nure.julia.events.events.JobFinishedEvent;
 import org.nure.julia.events.events.JobStatusChangedEvent;
 import org.nure.julia.generator.jobs.JobFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -22,25 +21,22 @@ public class EventDriverService {
     private final JmsTemplate jmsTemplate;
     private final ObjectMapper mapper = new ObjectMapper();
 
-    @Value("${application.jms.queues.appQueue}")
-    private String eventQueue;
-
     @Autowired
     public EventDriverService(JobFactory jobFactory, JmsTemplate jmsTemplate) {
         this.jobFactory = jobFactory;
         this.jmsTemplate = jmsTemplate;
     }
 
-    @EventListener(condition = "@deviceService.autoRegisterEnabled")
+    @EventListener
     public void deviceAddedEvent(DeviceAddedEvent event) {
         System.out.println(format("Device %s was added", event.getDeviceId()));
         jobFactory.registerDevice(event.getDeviceId());
     }
 
-    @EventListener(condition = "@jobFactory.autoBatchResultSendEnabled")
+    @EventListener
     public void jobFinishedEvent(JobFinishedEvent event) {
         try {
-            jmsTemplate.convertAndSend(eventQueue, mapper.writeValueAsString(event.getSource()));
+            jmsTemplate.convertAndSend(event.getDestination(), mapper.writeValueAsString(event.getSource()));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             System.out.println("Unable to send job results to the Queue");

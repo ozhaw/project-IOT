@@ -1,6 +1,5 @@
 package org.nure.julia.events.events;
 
-import org.nure.julia.misc.JobStatus;
 import org.springframework.context.ApplicationEvent;
 
 public class JobAddedEvent extends ApplicationEvent {

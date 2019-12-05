@@ -16,9 +16,6 @@ public class DeviceServiceImpl implements DeviceService {
 
     private Set<String> deviceIds = new HashSet<>();
 
-    @Value("${application.events.auto-device-register}")
-    private boolean autoRegisterEnabled;
-
     @Autowired
     public DeviceServiceImpl(ApplicationEventPublisher publisher) {
         this.publisher = publisher;
@@ -26,9 +23,7 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public boolean addDevice(String deviceId) {
-        if (autoRegisterEnabled) {
-            this.publisher.publishEvent(new DeviceAddedEvent(deviceId, deviceId));
-        }
+        this.publisher.publishEvent(new DeviceAddedEvent(deviceId, deviceId));
 
         return deviceIds.add(deviceId);
     }
@@ -59,7 +54,4 @@ public class DeviceServiceImpl implements DeviceService {
         return deviceIds.remove(deviceId);
     }
 
-    public boolean isAutoRegisterEnabled() {
-        return autoRegisterEnabled;
-    }
 }

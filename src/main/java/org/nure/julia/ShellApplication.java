@@ -6,12 +6,14 @@ import org.nure.julia.generator.jobs.spi.HealthInfoJob;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jms.annotation.EnableJms;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.function.Function;
 
 @SpringBootApplication
 @EnableScheduling
+@EnableJms
 public class ShellApplication {
 
     public static void main(String[] args) {
@@ -20,12 +22,12 @@ public class ShellApplication {
 
     @Bean
     public Function<String, Job> deviceInfoJobConstructor() {
-        return DeviceInfoJob::new;
+        return (deviceId) -> new DeviceInfoJob(deviceId, "app.device");
     }
 
     @Bean
     public Function<String, Job> healthInfoJobConstructor() {
-        return HealthInfoJob::new;
+        return (deviceId) -> new HealthInfoJob(deviceId, "app.health");
     }
 
 }
