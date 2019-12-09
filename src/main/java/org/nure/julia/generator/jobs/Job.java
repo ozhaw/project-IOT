@@ -1,8 +1,8 @@
 package org.nure.julia.generator.jobs;
 
 import org.nure.julia.dto.JobLogDto;
-import org.nure.julia.events.events.JobFinishedEvent;
-import org.nure.julia.events.events.JobStatusChangedEvent;
+import org.nure.julia.events.JobFinishedEvent;
+import org.nure.julia.events.JobStatusChangedEvent;
 import org.nure.julia.exceptions.WrongJobStateTransitionException;
 import org.nure.julia.misc.JobPriority;
 import org.nure.julia.misc.JobStatus;

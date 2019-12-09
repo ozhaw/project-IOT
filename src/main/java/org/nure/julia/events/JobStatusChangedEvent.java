@@ -1,4 +1,4 @@
-package org.nure.julia.events.events;
+package org.nure.julia.events;
 
 import org.nure.julia.misc.JobStatus;
 import org.springframework.context.ApplicationEvent;

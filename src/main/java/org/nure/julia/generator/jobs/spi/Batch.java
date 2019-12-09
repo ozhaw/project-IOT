@@ -1,6 +1,6 @@
 package org.nure.julia.generator.jobs.spi;
 
-import org.nure.julia.events.events.JobAddedEvent;
+import org.nure.julia.events.JobAddedEvent;
 import org.nure.julia.exceptions.BatchIsFullException;
 import org.nure.julia.exceptions.JobNotFoundException;
 import org.nure.julia.generator.jobs.Job;

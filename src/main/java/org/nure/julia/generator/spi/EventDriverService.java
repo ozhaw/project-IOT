@@ -2,10 +2,10 @@ package org.nure.julia.generator.spi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.nure.julia.events.events.DeviceAddedEvent;
-import org.nure.julia.events.events.JobAddedEvent;
-import org.nure.julia.events.events.JobFinishedEvent;
-import org.nure.julia.events.events.JobStatusChangedEvent;
+import org.nure.julia.events.DeviceAddedEvent;
+import org.nure.julia.events.JobAddedEvent;
+import org.nure.julia.events.JobFinishedEvent;
+import org.nure.julia.events.JobStatusChangedEvent;
 import org.nure.julia.generator.jobs.JobFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;

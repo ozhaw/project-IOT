@@ -1,9 +1,8 @@
 package org.nure.julia.generator.spi;
 
-import org.nure.julia.events.events.DeviceAddedEvent;
+import org.nure.julia.events.DeviceAddedEvent;
 import org.nure.julia.generator.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
